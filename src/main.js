@@ -5,7 +5,6 @@ import quasarIconSet from 'quasar/icon-set/material-icons'
 import App from './App.vue'
 import router from './router'
 
-// global axios
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
