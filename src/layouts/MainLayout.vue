@@ -50,9 +50,7 @@ import { ref } from 'vue';
 const drawerOpen = ref(false);
 
 const navigate = (path) => {
-  // Use Vue Router to navigate
   if (path) {
-    // Example: this assumes you have Vue Router set up
     // router.push({ name: path });
     console.log("Navigate to:", path);
   }
