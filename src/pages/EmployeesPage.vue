@@ -144,7 +144,10 @@ const fetchEmployees = async () => {
       headers: { "x-user-role": USER_ROLE }
     });
 
-    employees.value = res.data?.data?.employees || [];
+    employees.value = (res.data?.data?.employees || []).map(e => ({
+      ...e,
+      id: Number(e.id)
+    }));
   } catch (err) {
     console.error("Failed to fetch employees", err);
     employees.value = [];
@@ -179,7 +182,9 @@ const addEmployee = async () => {
 
     const added = res.data?.data?.addEmployee;
     if (added?.id) {
+      added.id = Number(added.id);
       employees.value.push(added);
+
       showAdd.value = false;
       form.value = { id: null, name: "", position: "", department: "", salary: null };
     } else {
@@ -226,7 +231,9 @@ const updateEmployee = async () => {
 
     const updated = res.data?.data?.updateEmployee;
     if (updated?.id) {
-      const index = employees.value.findIndex(e => e.id == updated.id);
+      updated.id = Number(updated.id);
+
+      const index = employees.value.findIndex(e => e.id === updated.id);
       if (index !== -1) employees.value[index] = updated;
 
       showEdit.value = false;
@@ -256,7 +263,7 @@ const deleteEmployee = async (id) => {
     });
 
     if (res.data?.data?.deleteEmployee) {
-      employees.value = employees.value.filter(e => e.id !== id);
+      employees.value = employees.value.filter(e => e.id !== Number(id));
     } else {
       alert("Failed to delete employee");
     }
