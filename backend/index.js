@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { createHandler } = require("graphql-http/lib/use/express");
 const { buildSchema } = require("graphql");
@@ -10,12 +11,12 @@ app.use(express.json());
 
 //  PostgreSQL connection
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "employee_db",
-  password: "admin",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 //  Authentication Middleware
 app.use((req, res, next) => {
