@@ -13,7 +13,7 @@
     </q-header>
 
     <!-- Left Drawer / Hamburger Panel -->
-    <q-drawer v-model="drawerOpen" show-if-above side="left" bordered width="220">
+    <q-drawer v-model="drawerOpen" show-if-above side="left" bordered :width="220">
       <q-list padding>
         <q-item clickable v-ripple @click="navigate('dashboard')">
           <q-item-section>Dashboard</q-item-section>

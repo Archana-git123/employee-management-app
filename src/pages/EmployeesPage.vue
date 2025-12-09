@@ -100,10 +100,12 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_GRAPHQL_ENDPOINT;
+
 const employees = ref([]);
 const showAdd = ref(false);
 const showEdit = ref(false);
-const viewMode = ref('list'); // default list view
+const viewMode = ref('list');
 
 const form = ref({
   id: null,
@@ -135,9 +137,7 @@ const fetchEmployees = async () => {
       }
     `
   };
-  const res = await axios.post("http://localhost:4000/graphql", query, {
-    headers: { "x-user-role": "admin" }
-  });
+  const res = await axios.post(API_URL, query);
   employees.value = res.data.data.employees;
 };
 
@@ -160,9 +160,7 @@ const addEmployee = async () => {
       }
     `
   };
-  const res = await axios.post("http://localhost:4000/graphql", mutation, {
-    headers: { "x-user-role": "admin" }
-  });
+  const res = await axios.post(API_URL, mutation);
   employees.value.push(res.data.data.addEmployee);
   showAdd.value = false;
   form.value = { id: null, name: "", position: "", department: "", salary: null };
@@ -193,9 +191,7 @@ const updateEmployee = async () => {
       }
     `
   };
-  const res = await axios.post("http://localhost:4000/graphql", mutation, {
-    headers: { "x-user-role": "admin" }
-  });
+  const res = await axios.post(API_URL, mutation);
   const index = employees.value.findIndex(e => e.id == res.data.data.updateEmployee.id);
   employees.value[index] = res.data.data.updateEmployee;
   showEdit.value = false;
@@ -210,9 +206,7 @@ const deleteEmployee = async (id) => {
       }
     `
   };
-  await axios.post("http://localhost:4000/graphql", mutation, {
-    headers: { "x-user-role": "admin" }
-  });
+  await axios.post(API_URL, mutation);
   employees.value = employees.value.filter(e => e.id !== id);
 };
 
