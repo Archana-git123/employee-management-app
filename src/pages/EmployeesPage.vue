@@ -100,6 +100,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_GRAPHQL_ENDPOINT;
+const USER_ROLE = import.meta.env.VITE_USER_ROLE;
 
 const employees = ref([]);
 const showAdd = ref(false);
@@ -138,7 +139,11 @@ const fetchEmployees = async () => {
         }
       `
     };
-    const res = await axios.post(API_URL, query);
+
+    const res = await axios.post(API_URL, query, {
+      headers: { "x-user-role": USER_ROLE }
+    });
+
     employees.value = res.data?.data?.employees || [];
   } catch (err) {
     console.error("Failed to fetch employees", err);
@@ -167,7 +172,11 @@ const addEmployee = async () => {
         }
       `
     };
-    const res = await axios.post(API_URL, mutation);
+
+    const res = await axios.post(API_URL, mutation, {
+      headers: { "x-user-role": USER_ROLE }
+    });
+
     const added = res.data?.data?.addEmployee;
     if (added?.id) {
       employees.value.push(added);
@@ -210,11 +219,16 @@ const updateEmployee = async () => {
         }
       `
     };
-    const res = await axios.post(API_URL, mutation);
+
+    const res = await axios.post(API_URL, mutation, {
+      headers: { "x-user-role": USER_ROLE }
+    });
+
     const updated = res.data?.data?.updateEmployee;
     if (updated?.id) {
       const index = employees.value.findIndex(e => e.id == updated.id);
       if (index !== -1) employees.value[index] = updated;
+
       showEdit.value = false;
       form.value = { id: null, name: "", position: "", department: "", salary: null };
     } else {
@@ -236,7 +250,11 @@ const deleteEmployee = async (id) => {
         }
       `
     };
-    const res = await axios.post(API_URL, mutation);
+
+    const res = await axios.post(API_URL, mutation, {
+      headers: { "x-user-role": USER_ROLE }
+    });
+
     if (res.data?.data?.deleteEmployee) {
       employees.value = employees.value.filter(e => e.id !== id);
     } else {
